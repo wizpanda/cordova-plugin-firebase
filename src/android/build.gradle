@@ -1,10 +1,17 @@
 buildscript {
     repositories {
+        google()
+        maven {
+            url "https://maven.fabric.io/public"
+        }
         jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.google.gms:google-services:4.1.0'
+        classpath "io.fabric.tools:gradle:1.30.0"
+        classpath "com.google.gms:google-services:4.2.0"
+        // Matching it with https://github.com/apache/cordova-android/blob/rel/8.0.0/bin/templates/project/app/build.gradle
+        classpath "com.android.tools.build:gradle:3.3.0"
     }
 }
 
@@ -15,14 +22,8 @@ repositories {
     }
 }
 
-dependencies {
-    compile 'me.leolin:ShortcutBadger:1.1.4@aar'
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
-        transitive = true
-    }
-}
-
 cdvPluginPostBuildExtras.add({
-    apply plugin: 'com.google.gms.google-services'
-    apply plugin: 'io.fabric'
+    // Use class instead of id (string) to be able to apply plugin from non-root gradle file
+    apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
+    apply plugin: com.crashlytics.tools.gradle.CrashlyticsPlugin
 })
